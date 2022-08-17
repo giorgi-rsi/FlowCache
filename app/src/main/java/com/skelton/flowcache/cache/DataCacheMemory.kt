@@ -2,6 +2,7 @@ package com.skelton.flowcache.cache
 
 import com.skelton.flowcache.system.TimeProvider
 import java.time.Duration
+import java.time.temporal.ChronoUnit
 
 /**
  * This cache implementation will only survive as long as the Application process
@@ -39,7 +40,7 @@ class DataCacheMemory(private val timeProvider: TimeProvider) : DataCache {
                 Duration.between(timeProvider.now(), timeout.time)
             }
             CachePolicy.Timeout.Always -> Duration.ZERO
-            CachePolicy.Timeout.Never -> Duration.ofDays(Long.MAX_VALUE)
+            CachePolicy.Timeout.Never -> ChronoUnit.DECADES.duration
         }
         val entry = CacheEntry(value, timeProvider.now() + expiryDuration)
         key.log("Setting cache Entry: $entry")
